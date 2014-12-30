@@ -16,12 +16,12 @@
 
 TCPSocket::TCPSocket(int *error){
     _handle=::socket(AF_INET,SOCK_STREAM,IPPROTO_TCP);
-	if(_handle<0){
-		::perror("socket returned error: ");
+    if(_handle<0){
+        ::perror("socket returned error: ");
         if(error){
             *error=1;
         }
-	}
+    }
 }
 
 TCPSocket::TCPSocket(const std::string &ip,uint32_t port,int *error){
@@ -113,11 +113,11 @@ int TCPSocket::listenForConnections(int maxNumberOfConnections){
 }
 
 int TCPSocket::bindToPort(uint16_t thePort){
-	_address.sin_family=AF_INET;
-	_address.sin_addr.s_addr=htonl(INADDR_ANY);
-	_address.sin_port=htons(thePort);
-	int server_len=sizeof(_address);
-	return ::bind(_handle,(struct sockaddr*)&_address,server_len);
+    _address.sin_family=AF_INET;
+    _address.sin_addr.s_addr=htonl(INADDR_ANY);
+    _address.sin_port=htons(thePort);
+    int server_len=sizeof(_address);
+    return ::bind(_handle,(struct sockaddr*)&_address,server_len);
 }
 
 int TCPSocket::connect(){
@@ -156,14 +156,26 @@ TCPSocket::Set::Set(){
 
 #pragma mark - Getters
 
+bool TCPSocket::Set::operator[](const TCPSocket &sock) const{
+    return this->socketIsSet(sock);
+}
+
 bool TCPSocket::Set::socketIsSet(const TCPSocket &sock) const{
     return FD_ISSET(sock.handle(),&_set);
 }
 
 #pragma mark - Public
 
+void TCPSocket::Set::operator-=(const TCPSocket &sock){
+    this->removeSocket(sock);
+}
+
 void TCPSocket::Set::removeSocket(const TCPSocket &sock){
     FD_CLR(sock.handle(),&_set);
+}
+
+void TCPSocket::Set::operator+=(const TCPSocket &sock){
+    this->addSocket(sock);
 }
 
 void TCPSocket::Set::addSocket(const TCPSocket &sock){

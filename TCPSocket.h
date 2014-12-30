@@ -15,14 +15,23 @@ class TCPSocket{
 public:
     typedef int SocketHandle_t;
     
-    //  constructor for server listen socket..
+    /**
+     *  Constructor for server listen socket.
+     *  @param error is 0 if socket is created..
+     */
     TCPSocket(int *error=nullptr);
     
-    //  constructor for tcp client..
-    //  error is 0 if socket is created..
+    /**
+     *  Constructor for tcp client.
+     *  @param ip target host ip address (for example "192.168.1.12").
+     *  @param port target host port.
+     *  @param error is 0 if socket is created.
+     */
     TCPSocket(const std::string &ip,uint32_t port,int *error=nullptr);
     
-    //  constructor for server clients..
+    /**
+     *  Constructor for server clients.
+     */
     TCPSocket(SocketHandle_t);
     TCPSocket(TCPSocket&&);
     TCPSocket(const TCPSocket&)=delete;
@@ -38,21 +47,38 @@ public:
     int bindToPort(uint16_t);
     int listenForConnections(int maxNumberOfConnections);
     
-    //  should be called only for server listen socket (constructed using default c-tor)..
+    /**
+     *  Should be called only for server listen socket (which is constructed using default c-tor).
+     */
     TCPSocket acceptConnection();
     
     SocketHandle_t handle() const;
     int bytesToRead() const;
     const struct sockaddr_in& address() const;
     
-    //  socket set class, fd_set object representation..
+    /**
+     *  Socket set class, fd_set object representation.
+     */
     class Set{
     public:
         Set();
         
+        /**
+         *  The same thing as addSocket.
+         */
+        void operator+=(const TCPSocket&);
         void addSocket(const TCPSocket&);
+        
+        /**
+         *  The same thing as removeSocket.
+         */
+        void operator-=(const TCPSocket&);
         void removeSocket(const TCPSocket&);
         
+        /**
+         *  The same thing as socketIsSet.
+         */
+        bool operator[](const TCPSocket&) const;
         bool socketIsSet(const TCPSocket&) const;
     private:
         fd_set _set;
