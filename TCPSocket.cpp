@@ -21,6 +21,10 @@ TCPSocket::TCPSocket(int *error){
         if(error){
             *error=1;
         }
+    }else{
+        if(error){
+            *error=0;
+        }
     }
 }
 
