@@ -3,7 +3,7 @@
 #include <string>
 #include <arpa/inet.h>  /* for sockaddr_in and inet_addr() */
 
-class TCPSocket{
+class TCPSocket {
 public:
     using SocketHandle_t = int;
     

@@ -6,7 +6,7 @@
 #include <cstring>
 #endif
 
-TCPSocket::TCPSocket(int *error){
+TCPSocket::TCPSocket(int *error) {
     _handle = ::socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (_handle < 0) {
         ::perror("socket returned error: ");
