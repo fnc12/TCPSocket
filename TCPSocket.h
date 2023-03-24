@@ -51,7 +51,7 @@ public:
     /**
      *  Socket set class, fd_set object representation.
      */
-    class Set{
+    class Set {
     public:
         Set();
         
