@@ -1,11 +1,3 @@
-//
-//  Socket.h
-//  Achilles
-//
-//  Created by zhenik on 14.04.14.
-//  Copyright (c) 2014 Venus. All rights reserved.
-//
-
 #pragma once
 
 #include <string>
@@ -13,13 +5,13 @@
 
 class TCPSocket{
 public:
-    typedef int SocketHandle_t;
+    using SocketHandle_t = int;
     
     /**
      *  Constructor for server listen socket.
      *  @param error is 0 if socket is created..
      */
-    TCPSocket(int *error=nullptr);
+    TCPSocket(int* error = nullptr);
     
     /**
      *  Constructor for tcp client.
@@ -27,7 +19,7 @@ public:
      *  @param port target host port.
      *  @param error is 0 if socket is created.
      */
-    TCPSocket(const std::string &ip,uint32_t port,int *error=nullptr);
+    TCPSocket(const std::string& ip, uint32_t port, int* error = nullptr);
     
     /**
      *  Constructor for server clients.
@@ -43,7 +35,7 @@ public:
     void close();
     int connect();
     size_t writeBytes(const void*,size_t);
-    size_t readBytes(void *data,size_t bytesCount);
+    size_t readBytes(void* data, size_t bytesCount);
     int bindToPort(uint16_t);
     int listenForConnections(int maxNumberOfConnections);
     
@@ -86,11 +78,11 @@ public:
         friend class TCPSocket;
     };
     
-    static int Select(Set *readSockets,Set *writeSockets,Set *errorSockets,struct timeval *timeout);
+    static int Select(Set* readSockets, Set* writeSockets, Set* errorSockets, struct timeval* timeout);
 private:
     SocketHandle_t _handle;
     struct sockaddr_in _address;
     
     //  private c-tor for acception..
-    TCPSocket(SocketHandle_t,const struct sockaddr_in&);
+    TCPSocket(SocketHandle_t, const struct sockaddr_in&);
 };
